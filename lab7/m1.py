@@ -5,8 +5,8 @@ pygame.init()
 screen = pygame.display.set_mode((1000, 1000))
 done = False
 bg_image = pygame.image.load('mainclock.png')
-sec_img = pygame.image.load('leftarm.png')
-min_img = pygame.image.load('rightarm.png')
+sec_img = pygame.image.load('left_arm.png')
+min_img = pygame.image.load('right_arm.png')
 rect = bg_image.get_rect(center=(500, 500))
 
 while not done:
