@@ -138,7 +138,7 @@ cell_size = 40
 cell_number = 20
 screen = pygame.display.set_mode((cell_number*cell_size, cell_number*cell_size))#getting screen size 
 fps = pygame.time.Clock()#frames per second
-apple = pygame.image.load('apple.png').convert_alpha()#getting apple image
+apple = pygame.image.load("C:/Users/User/OneDrive/Рабочий стол/PP2/lab8/snace/apple.png").convert_alpha() # getting apple image
 sized_apple = pygame.transform.scale(apple, (40, 40))#resizing it to the size of the cell
 #getting size of the game font
 game_font = pygame.font.Font(None, 40)
