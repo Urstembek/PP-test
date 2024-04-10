@@ -31,7 +31,7 @@ game_over = font.render("Game Over", True, BLACK)
 background = pygame.image.load("AnimatedStreet.png")
 
 # Create a white screen
-DISPLAYSURF = pygame.display.set_mode((410, 600))
+DISPLAYSURF = pygame.display.set_mode((400, 600))
 DISPLAYSURF.fill(WHITE)
 pygame.display.set_caption("Game")
 
