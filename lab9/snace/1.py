@@ -1,14 +1,23 @@
 import pygame, sys, random, time
 from pygame.math import Vector2
 
+
+
 class Fruit:
     def __init__(self):
         self.randomize()
+        self.is_gold = False
+        self.golden_time = 0
     #method for drawing apple
+
     def draw_fruit(self):
-        fruit_rect = pygame.Rect(int(self.pos.x * cell_size), int(self.pos.y * cell_size), cell_size, cell_size)
-        screen.blit(sized_apple, fruit_rect)
-        #pygame.draw.rect(screen,(126,166,114),fruit_rect)
+        if self.is_gold:
+            fruit_rect = pygame.Rect(int(self.pos.x * cell_size), int(self.pos.y * cell_size), cell_size, cell_size)
+            screen.blit(sized_gold_apple, fruit_rect)
+        else:
+            fruit_rect = pygame.Rect(int(self.pos.x * cell_size), int(self.pos.y * cell_size), cell_size, cell_size)
+            screen.blit(sized_apple, fruit_rect)
+    
     #randomly placing apple
     def randomize(self):
         self.x = random.randint(0,cell_number-1)
@@ -58,6 +67,7 @@ class Main:
         self.snake.move_snake()
         self.check_collision()
         self.check_fail()
+        self.check_golden_fruit_timeout()
     #drawing elements on the screen
     def draw_elements(self):
         self.draw_grass()
@@ -68,15 +78,22 @@ class Main:
         
     #method for checking for collision
     def check_collision(self):
-        #if fruit collisions with snake's "head" 
         if self.fruit.pos == self.snake.body[0]:
-            self.fruit.randomize()#new fruit
-            self.snake.add_block()#adding block to the end of snake
-            #increasing speed
-            self.fruits_eaten += 1  
-            if self.fruits_eaten % 4 == 0 and self.timer_interval >=45:  
+            if self.fruit.is_gold:
+                self.fruits_eaten += 5  # Extra points for gold apple
+            else:
+                self.fruits_eaten += 1
+            self.fruit.randomize()
+            self.fruit.is_gold = random.choice([True, False])  # Randomly decide if next fruit is gold
+            self.snake.add_block()
+            if self.fruits_eaten % 4 == 0 and self.timer_interval >= 45:
                 self.decrease_timer_interval()
-                self.level+=1 
+                self.level += 1
+            if random.choice([True, False]):
+                self.fruit.is_gold = True
+                self.fruit.golden_time = time.time()
+            else:
+                self.fruit.is_gold = False
 
     #increasing speed by decreasing timer interval
     def decrease_timer_interval(self):
@@ -114,7 +131,7 @@ class Main:
                         pygame.draw.rect(screen, grass_color, grass_rect)
     #method for drawing score onto the screen
     def draw_score(self):
-        score_text = str(len(self.snake.body) - 3)
+        score_text = str(self.fruits_eaten)
         score_surface = game_font.render(score_text, True , (56,74,12))
         score_x = int(cell_size*cell_number-60)
         score_y = int(cell_size*cell_number-40)
@@ -130,16 +147,20 @@ class Main:
         level_y = int(cell_size*cell_number-640)
         level_rect = level_surface.get_rect(center=(level_x,level_y))
         screen.blit(level_surface,level_rect)
-
-
+    # 7 second for gold apple
+    def check_golden_fruit_timeout(self):
+        if self.fruit.is_gold and (time.time() - self.fruit.golden_time > 7):
+            self.fruit.is_gold = False # gold apple is dissapear 
 
 pygame.init()
 cell_size = 40
 cell_number = 20
 screen = pygame.display.set_mode((cell_number*cell_size, cell_number*cell_size))#getting screen size 
 fps = pygame.time.Clock()#frames per second
-apple = pygame.image.load("C:/Users/User/OneDrive/Рабочий стол/PP2/lab8/snace/apple.png").convert_alpha() # getting apple image
+apple = pygame.image.load('apple.png').convert_alpha()#getting apple image
+golden = pygame.image.load('goldapple.png').convert_alpha()
 sized_apple = pygame.transform.scale(apple, (40, 40))#resizing it to the size of the cell
+sized_gold_apple = pygame.transform.scale(golden, (40, 40))#resizing it to the size of the cell
 #getting size of the game font
 game_font = pygame.font.Font(None, 40)
 #getting the interval in which the game will be updated

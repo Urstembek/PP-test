@@ -94,7 +94,7 @@ class Coin(pygame.sprite.Sprite):
 class BigCoin(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.image.load('gold_coin.png')
+        self.image = pygame.image.load('goldmoney.png')
         self.rect = self.image.get_rect()
     def move(self):
         self.rect.move_ip(0, SPEED)
