@@ -49,9 +49,9 @@ while True:
                     play_music()
             elif event.key == K_s:
                 stop_music()
-            elif event.key == K_n:
+            elif event.key == K_d:
                 next_track()
-            elif event.key == K_b:
+            elif event.key == K_a:
                 prev_track()
 
     screen.blit(background, (0, 0))
