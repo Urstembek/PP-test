@@ -13,10 +13,10 @@ while not done:
             done = True
 
     pressed = pygame.key.get_pressed()
-    if pressed[pygame.K_UP] and y-25>0: y -= 20
-    if pressed[pygame.K_DOWN] and y+25<600: y += 20
-    if pressed[pygame.K_LEFT] and x-25>0: x -= 20
-    if pressed[pygame.K_RIGHT] and x+25<800: x += 20
+    if pressed[pygame.K_UP] and y-25>0: y -= 10
+    if pressed[pygame.K_DOWN] and y+25<600: y += 10
+    if pressed[pygame.K_LEFT] and x-25>0: x -= 10
+    if pressed[pygame.K_RIGHT] and x+25<800: x += 10
     screen.fill((255, 255, 255))
     pygame.draw.circle(screen, (255, 0, 0), (x, y), 25)
 

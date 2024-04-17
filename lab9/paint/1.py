@@ -75,7 +75,7 @@ while run:
     draw()
     
     click = pygame.mouse.get_pressed()[0] # Get Mouse Button Pressed
-    if click and mouse[1] > 100:
+    if click and mouse[1] > 115:
         painting.append((activeColor, mouse, activeShape)) # Add Mouse Position to List
     drawPaint(painting)
 

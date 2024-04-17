@@ -131,10 +131,10 @@ while True:
 
     DISPLAYSURF.blit(background, (0, 0))
     scores = font_small.render(str(SCORE), True, BLACK)
-    DISPLAYSURF.blit(scores, (10, 10))
+    DISPLAYSURF.blit(scores, (20, 10))
 
     counter = font_small.render(str(coin2), True, BLACK)
-    DISPLAYSURF.blit(counter, (380, 10))
+    DISPLAYSURF.blit(counter, (360, 10))
 
     # Check for collision with coins
     collided_coins = pygame.sprite.spritecollide(P1, coins, True)
