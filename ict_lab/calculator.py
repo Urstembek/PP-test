@@ -10,18 +10,18 @@ class MyFrame(wx.Frame):
     def create_widgets(self):
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        # Текстовые поля для ввода чисел и операции
+        
         self.num1_text = wx.TextCtrl(self.panel)
         self.num2_text = wx.TextCtrl(self.panel)
         self.operation_text = wx.TextCtrl(self.panel)
 
-        # Кнопка для запуска операции
+
         self.calculate_button = wx.Button(self.panel, label="Calculate")
 
-        # Текстовое поле для вывода результата
+        
         self.result_text = wx.TextCtrl(self.panel, style=wx.TE_READONLY)
 
-        # Размещение элементов на панели
+        
         sizer.Add(wx.StaticText(self.panel, label="Number 1:"), 0, wx.EXPAND | wx.ALL, border=5)
         sizer.Add(self.num1_text, 0, wx.EXPAND | wx.ALL, border=5)
         sizer.Add(wx.StaticText(self.panel, label="Number 2:"), 0, wx.EXPAND | wx.ALL, border=5)
@@ -34,16 +34,16 @@ class MyFrame(wx.Frame):
 
         self.panel.SetSizer(sizer)
 
-        # Привязываем событие нажатия кнопки к методу calculate
+        
         self.calculate_button.Bind(wx.EVT_BUTTON, self.calculate)
 
     def calculate(self, event):
-        # Получаем введенные пользователем числа и операцию
+        
         num1 = float(self.num1_text.GetValue())
         num2 = float(self.num2_text.GetValue())
         operation = self.operation_text.GetValue()
 
-        # Выполняем операцию в зависимости от введенного символа
+        
         if operation == '+':
             result = num1 + num2
         elif operation == '-':
@@ -51,7 +51,6 @@ class MyFrame(wx.Frame):
         elif operation == '*':
             result = num1 * num2
         elif operation == '/':
-            # Проверка деления на ноль
             if num2 == 0:
                 self.result_text.SetValue("Error: Division by zero")
                 return
@@ -61,8 +60,12 @@ class MyFrame(wx.Frame):
             self.result_text.SetValue("Error: Invalid operation")
             return
 
-        # Выводим результат
         self.result_text.SetValue(str(result))
+    def on_key_press(self, event):
+        keycode = event.GetKeyCode() 
+        if keycode == wx.WXK_CANCEL:  
+            self.Destroy() 
+        event.Skip()
 
 if __name__ == "__main__":
     app = wx.App(False)
