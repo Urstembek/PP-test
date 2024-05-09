@@ -5,9 +5,9 @@ def connect_db():
     return psycopg2.connect(
         host="localhost",
         port="5432",
-        dbname="master",
+        dbname="tester",
         user="postgres",
-        password="qwerty",
+        password="daulet2004",
         connect_timeout=10,
         sslmode="prefer"
     )
@@ -30,7 +30,7 @@ def create_table():
 def load_from_csv():
     conn = connect_db()
     cur = conn.cursor()
-    with open('phonebook.csv', 'r') as f:
+    with open('C:/Users/User/OneDrive/Рабочий стол/PP2/lab10/phonebook/phonebook.csv', 'r') as f:
         reader = csv.reader(f)
         next(reader)  # Пропускаем заголовок
         for row in reader:
@@ -88,15 +88,59 @@ def delete_data():
     cur.close()
     conn.close()
 
+def delete_by_id():
+    conn = connect_db()
+    cur = conn.cursor()
+    try:
+        id_to_delete = int(input("Введите ID для удаления: "))
+    except ValueError:
+        print("ID должен быть целым числом.")
+        return
+    cur.execute("DELETE FROM phonebook WHERE id = %s", (id_to_delete,))
+    if cur.rowcount == 0:
+        print("Нет записи с таким ID.")
+    else:
+        print("Запись успешно удалена.")
+    conn.commit()
+    cur.close()
+    conn.close()
+
+def update_name_and_lastname():
+    conn = connect_db()
+    cur = conn.cursor()
+    try:
+        id_to_update = int(input("Введите ID для обновления: "))
+    except ValueError:
+        print("ID должен быть целым числом.")
+        return
+    
+    new_first_name = input("Введите новое имя: ")
+    new_last_name = input("Введите новую фамилию: ")
+    
+    cur.execute(
+        "UPDATE phonebook SET first_name = %s, last_name = %s WHERE id = %s",
+        (new_first_name, new_last_name, id_to_update)
+    )
+    if cur.rowcount == 0:
+        print("Нет записи с таким ID.")
+    else:
+        print("Запись успешно обновлена.")
+    conn.commit()
+    cur.close()
+    conn.close()
+
+
 def main():
     create_table()
     while True:
         print("\n1. Загрузить данные из CSV")
         print("2. Добавить данные через консоль")
-        print("3. Обновить данные")
+        print("3. Изменить имя")
         print("4. Просмотреть все записи")
-        print("5. Удалить данные")
-        print("6. Выход")
+        print("5. Удалить данные по телефону")
+        print("6. Удалить данные по ID")
+        print("7. Обновить данные")
+        print("8. выход")
         choice = input("Выберите действие: ")
         
         if choice == '1':
@@ -110,6 +154,10 @@ def main():
         elif choice == '5':
             delete_data()
         elif choice == '6':
+            delete_by_id()
+        elif choice == '7':
+            update_name_and_lastname()
+        elif choice == '8':
             break
         else:
             print("Неверный выбор. Пожалуйста, попробуйте снова.")

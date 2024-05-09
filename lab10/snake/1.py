@@ -8,7 +8,7 @@ def connect_db():
         port="5432",
         dbname="snake",
         user="postgres",
-        password="qwerty",
+        password="daulet2004",
         connect_timeout=10,
         sslmode="prefer"
     )
@@ -27,10 +27,18 @@ def create_high_scores_table():
     cur.close()
     conn.close()
 
-def insert_score(name, apples_eaten):
+def insert_or_update_score(name, apples_eaten):
     conn = connect_db()
     cur = conn.cursor()
-    cur.execute("INSERT INTO high_scores (player_name, apples_eaten) VALUES (%s, %s)", (name, apples_eaten))
+    cur.execute("SELECT apples_eaten FROM high_scores WHERE player_name = %s", (name,))
+    result = cur.fetchone()
+
+    if result:
+        if apples_eaten > result[0]:
+            cur.execute("UPDATE high_scores SET apples_eaten = %s WHERE player_name = %s", (apples_eaten, name))
+    else:
+        cur.execute("INSERT INTO high_scores (player_name, apples_eaten) VALUES (%s, %s)", (name, apples_eaten))
+    
     conn.commit()
     cur.close()
     conn.close()
@@ -157,8 +165,14 @@ class Main:
     def game_over(self):
         time.sleep(1.2)
         pygame.quit()
-        insert_score(name, self.fruits_eaten)
+        insert_or_update_score(name, self.fruits_eaten)
         print(f"{name} сьел {self.fruits_eaten} яблок")
+        top_scores = get_top_scores()
+        print("Топ игроков:")
+        for i, score in enumerate(top_scores, start=1):
+            print(f"{i}. {score[0]} - {score[1]} яблок")
+
+        print(f"{name} съел {self.fruits_eaten} яблок")
         sys.exit()
     
     #drawing grass pattern, evety odd cell changes color to grass_color
@@ -209,8 +223,8 @@ cell_size = 40
 cell_number = 20
 screen = pygame.display.set_mode((cell_number*cell_size, cell_number*cell_size))#getting screen size 
 fps = pygame.time.Clock()#frames per second
-apple = pygame.image.load('apple.png').convert_alpha()#getting apple image
-golden = pygame.image.load('goldapple.png').convert_alpha()
+apple = pygame.image.load('C:/Users/User/OneDrive/Рабочий стол/PP2/lab10/snake/apple.png').convert_alpha()
+golden = pygame.image.load('C:/Users/User/OneDrive/Рабочий стол/PP2/lab10/snake/goldapple.png').convert_alpha()
 sized_apple = pygame.transform.scale(apple, (40, 40))#resizing it to the size of the cell
 sized_gold_apple = pygame.transform.scale(golden, (40, 40))#resizing it to the size of the cell
 #getting size of the game font
